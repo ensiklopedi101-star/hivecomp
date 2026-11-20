@@ -42,10 +42,20 @@ Alternatif cepat kalau GitHub CLI sudah login: `gh repo create hivecomp --public
 
 1. Di project Vercel → tab **Storage** → **Create Database** → pilih
    **Postgres (Neon)** → **Continue**.
-2. Vercel otomatis menambahkan `DATABASE_URL` / `POSTGRES_URL` ke
-   Environment Variables untuk **Production, Preview, dan Development**.
+2. Vercel akan menambahkan Environment Variables untuk **Production, Preview,
+   dan Development**.
+   > ⚠️ **Penting — perhatikan nama variabelnya.** Integrasi Marketplace (Neon)
+   > bisa menambahkan **prefix** sesuai nama database, misalnya
+   > `HIVE_DATABASE_URL`, `HIVE_POSTGRES_URL`, `HIVE_PGHOST`, dst. Aplikasi
+   > sudah membaca nama ber-prefix itu (varian pooled lebih diutamakan), jadi
+   > tidak perlu rename. Yang **wajib** dicek: variabel tersebut harus
+   > tercentang untuk environment **Production**, lalu **Redeploy**.
 3. Pilih region terdekat (Singapore `Sin1` bila tersedia) agar latensi rendah
    agar latensi tetap rendah bagi pengunjung lokal.
+4. Cek `https://<domain>/api/health`. Respons sukses:
+   `{"ok":true,"database":"ready","envKey":"HIVE_DATABASE_URL",...}` — `envKey`
+   menunjukkan variabel mana yang dipakai. Bila gagal, responsnya menyebut
+   penyebabnya (`not_configured` vs `error` + pesan dari driver).
 
 ### Langkah 4 — Set password admin
 
@@ -130,7 +140,10 @@ Actions — jangan dua-duanya aktif untuk production.
 | Gejala | Penyebab & solusi |
 | --- | --- |
 | Build gagal: `DATABASE_URL is required` | Koneksi sekarang lazy, jadi bukan ini. Cek `npm run build` lokal; biasanya error TypeScript. |
-| `/api/health` → `{"ok":false}` | Postgres belum ter-attach, atau memakai connection string **non-pooled**. Cek Storage → Connect → copy **pooled** URL. |
+| `/api/health` → `{"ok":false,"database":"not_configured"}` | Tidak ada connection string yang terbaca. Cek Environment Variables: pasti ada `DATABASE_URL` **atau** varian ber-prefix (`HIVE_DATABASE_URL`), terpasang untuk **Production**, lalu **Redeploy**. Respons memuat `envKeysFound` untuk menunjukkan var database apa saja yang terlihat. |
+| `/api/health` → `{"ok":false,"database":"error"}` | Koneksi string ada tapi gagal connect. Pesan `error` menyebut sebabnya (password salah, host mati, database ter-suspend). Pastikan memakai URL **pooled** (`…-pooler…`). |
+| `/admin` terbuka tapi ada banner “Database bermasalah” | Panel sengaja tetap tampil; datanya kosong. Perbaiki database sesuai `/api/health` di atas. |
+| Login `/admin` selalu gagal padahal password benar | Env `ADMIN_PASSWORD` mungkin dibuat dengan **nilai kosong** — dianggap belum diset, jadi password aktif adalah `hive-admin`. Isi nilainya (atau hapus variabelnya), lalu Redeploy. |
 | Halaman kosong / 500 saat pertama dibuka | Cold start pertama sedang membuat tabel. Refresh 1–2 kali, lalu cek `/api/health`. |
 | `/admin` tidak mau login | `ADMIN_PASSWORD` berubah setelah cookie lama diterbitkan → logout, lalu login lagi. |
 | Gambar berita tidak muncul | Demo memakai URL Pexels publik; pastikan domain gambar tidak diblokir jaringan. Ganti lewat admin. |
