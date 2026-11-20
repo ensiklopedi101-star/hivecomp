@@ -1,0 +1,43 @@
+HiveComp — 18 Konsep Logo / Brand Studio
+
+6 brand × 3 arah desain. Pilihan konsep bukan klaim pendaftaran merek.
+Semua simbol dibuat khusus dengan geometri SVG; bukan ikon platform pihak ketiga.
+Wordmark memakai Space Grotesk Bold berlisensi SIL OFL; teks SVG sudah menjadi outline.
+MARK: simbol saja, latar transparan (SVG / PNG 1024px).
+LOGO: simbol + wordmark untuk latar terang (SVG / PNG 1740px).
+LOGO-DARK: simbol + wordmark untuk latar gelap (SVG).
+MONO: simbol satu warna (SVG).
+BOARD: tiga opsi per brand (SVG / PNG).
+
+Sebelum final: cek kemiripan merek, uji ukuran kecil, dan setujui ejaan/warna.
+Memilih di Studio tidak mengganti situs. Penerapan memerlukan login admin dan tombol konfirmasi.
+
+HiveComp
+  01 Colony — rekomendasi: Heksagon sebagai rumah bersama, dengan huruf H yang dibentuk oleh ruang negatif. Sederhana tanpa kehilangan kaitan dengan nama Hive.
+  02 Wingform: Dua bidang sayap mengapit sebuah penghubung. Mengambil gagasan lebah tanpa menggambar maskot secara harfiah.
+  03 HC Interlock: Huruf H dan C saling mengunci dalam bentuk siku yang ringkas. Alternatif yang lebih tenang dan tidak bergantung pada simbol sarang.
+
+PopBeez
+  01 Pop Talk — rekomendasi: Balon percakapan bertemu monogram P. Menunjukkan konten yang tidak berhenti dibaca, tetapi memancing percakapan penggemar.
+  02 Fan Spark: Empat kelopak menyerupai kilau panggung, dengan satu titik aksen. Tidak mengunci identitas ke satu negara atau satu jenis fandom.
+  03 Double Bubble: Dua ruang bulat membentuk huruf B dengan siluet yang lembut. Lebih abstrak dan tidak terlalu menyerupai media berita formal.
+
+NusaBeez
+  01 Headline N — rekomendasi: Bidang kartu dengan sudut terpotong dan monogram N di dalamnya. Bentuknya merujuk ke format news card, bukan lambang institusi.
+  02 News Signal: Tiga pita bersudut membentuk N yang tampak bergerak. Arah ini lebih ringan daripada logo redaksi konvensional.
+  03 Open Pages: Dua halaman terbuka membentuk ruang baca di tengah. Memberi kesan informatif tanpa memakai ikon bendera atau peta.
+
+BlinkBeez
+  01 Flash Play: Segitiga putar dipotong kilatan petir. Menegaskan video pendek yang langsung ke inti topik.
+  02 Blink Eye — rekomendasi: Mata yang menyimpan tombol putar sebagai pupilnya. Menghubungkan nama Blink dengan kebiasaan melihat video dalam sekali lirik.
+  03 Frame B: Monogram B dengan dua celah segitiga, seperti dua frame video yang berurutan. Identitas lebih padat dan berani.
+
+E-Beez
+  01 Carry e — rekomendasi: Tas belanja dengan huruf e dari ruang negatif. Fungsi belanja langsung terbaca, tetapi tetap menyimpan inisial brand.
+  02 Loop Check: Lingkar e terbuka berakhir pada tanda centang. Mengarah ke pengalaman belanja yang selesai, mudah, dan terasa tertata.
+  03 Market Wings: Sepasang sayap dan paket segi enam membentuk lebah abstrak. Kaitannya dengan keluarga HiveComp paling terasa pada opsi ini.
+
+Portal-Hub
+  01 Gateway — rekomendasi: Dua gerbang bertingkat dengan sebuah ambang di tengah. Gagasan portal diterjemahkan menjadi simbol yang kokoh dan mudah dibaca.
+  02 Orbit Hub: Satu pusat dikelilingi tiga lintasan informasi. Menekankan fungsi agregasi dari banyak sumber tanpa menggambarkan alur antarmerek.
+  03 Feed Grid: Empat panel berita bertemu pada ruang kosong berbentuk bintang. Terasa seperti antarmuka agregator yang menyatukan beragam kategori.
