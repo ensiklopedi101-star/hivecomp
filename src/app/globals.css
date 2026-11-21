@@ -100,6 +100,52 @@ body {
   }
 }
 
+/* Footer wordmark — each letter ignites under the cursor.
+   "HIVE" glows white, "COMP" glows honey-gold. */
+.word-glow {
+  -webkit-text-stroke: 1.5px rgb(255 255 255 / 0.13);
+  color: transparent;
+}
+.word-glow > span {
+  display: inline-block;
+  transition:
+    color 260ms ease,
+    -webkit-text-stroke-color 260ms ease,
+    transform 260ms ease;
+}
+@media (hover: hover) {
+  .word-glow > span:hover {
+    color: rgb(255 255 255 / 0.1);
+    -webkit-text-stroke-color: rgb(255 255 255 / 0.95);
+    text-shadow:
+      0 0 0.04em rgb(255 255 255 / 0.9),
+      0 0 0.12em rgb(255 255 255 / 0.55),
+      0 0 0.28em rgb(255 255 255 / 0.3);
+    transform: translateY(-0.012em);
+  }
+  .word-glow > span[data-glow="gold"]:hover {
+    color: rgb(255 176 0 / 0.14);
+    -webkit-text-stroke-color: var(--color-hive-soft);
+    text-shadow:
+      0 0 0.04em rgb(255 176 0 / 0.95),
+      0 0 0.12em rgb(255 176 0 / 0.6),
+      0 0 0.28em rgb(255 176 0 / 0.34);
+  }
+}
+.word-glow-wrap {
+  overflow-x: clip;
+}
+@media (max-width: 640px) {
+  .word-glow {
+    -webkit-text-stroke-width: 1px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .word-glow > span {
+    transition: none;
+  }
+}
+
 /* Honeycomb clip */
 .clip-hex {
   clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
