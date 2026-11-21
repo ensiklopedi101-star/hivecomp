@@ -50,9 +50,9 @@ export default function Stats({
           </div>
           <Reveal delay={0.1}>
             <p className="max-w-xs text-xs leading-relaxed text-stone-500">
-              Angka bawaan adalah{" "}
-              <span className="text-hive">template ilustrasi</span> — ganti lewat
-              /admin bila ingin dipakai di produksi.
+              <span className="text-hive">Sasaran internal</span> tahun pertama
+              kami — bukan capaian saat ini, dan kami tinjau berkala seiring
+              perjalanan.
             </p>
           </Reveal>
         </div>

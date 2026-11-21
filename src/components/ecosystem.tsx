@@ -37,7 +37,7 @@ const BRANDS: Brand[] = [
     id: "popbeez",
     name: "PopBeez",
     platform: "Facebook Page",
-    desc: "News card hiburan Asia — drakor, dracin, idol, manga, donghua — dalam format ringkas yang mudah dibagikan.",
+    desc: "News card hiburan Asia — drakor, dracin, idol, manga, dan donghua — dikemas ringkas untuk dibaca sekilas lalu dibagikan.",
     tags: ["Drakor", "Dracin", "Idol", "Manga", "Donghua"],
     color: "#ff4d8d",
     icon: Popcorn,
@@ -48,7 +48,7 @@ const BRANDS: Brand[] = [
     id: "nusabeez",
     name: "NusaBeez",
     platform: "Facebook Page",
-    desc: "Berita nasional dalam format kartu yang ringan dibaca. Berbagi satu backend dengan PopBeez.",
+    desc: "News card nasional yang ringan dibaca, dengan alur penerbitan yang sama seperti PopBeez.",
     tags: ["Nasional", "Terkini", "Berita"],
     color: "#ff453a",
     icon: Flag,
@@ -58,8 +58,8 @@ const BRANDS: Brand[] = [
   {
     id: "portal-hub",
     name: "Portal-Hub",
-    platform: "Website Aggregator",
-    desc: "Agregator berita mandiri yang sudah beroperasi di portal-hub.online.",
+    platform: "Situs Agregator Berita",
+    desc: "Agregator berita yang merangkum kabar dari berbagai sumber, aktif setiap hari di portal-hub.online.",
     tags: ["Agregator", "Berita", "Web"],
     color: "#38bdf8",
     icon: Globe,
@@ -70,7 +70,7 @@ const BRANDS: Brand[] = [
     id: "blinkbeez",
     name: "BlinkBeez",
     platform: "YouTube Shorts",
-    desc: "Rencana kanal video pendek 60 detik. Saat ini kanal belum berjalan.",
+    desc: "Kanal video pendek berdurasi 60 detik untuk potongan berita dan hiburan. Sedang disiapkan untuk tayang.",
     tags: ["Shorts", "Video", "Segera"],
     color: "#a78bfa",
     icon: Zap,
@@ -81,7 +81,7 @@ const BRANDS: Brand[] = [
     id: "e-beez",
     name: "E-Beez",
     platform: "E-Commerce",
-    desc: "Marketplace yang sudah punya frontend & backend sendiri — diakses langsung lewat subdomainnya.",
+    desc: "Marketplace produk UMKM dengan sistem sendiri — dari katalog, pembayaran, hingga pengiriman.",
     tags: ["Marketplace", "UMKM", "COD"],
     color: "#34d399",
     icon: ShoppingBag,
@@ -131,7 +131,7 @@ function MiniNewsCard({
           <Share2 className="h-3 w-3" />
         </span>
         <span className="font-mono text-[8px] uppercase tracking-wider text-stone-600">
-          Contoh kartu
+          News card
         </span>
       </div>
     </div>
@@ -161,7 +161,7 @@ function MiniArticleList({ color }: { color: string }) {
         </div>
       ))}
       <p className="pl-1 text-right font-mono text-[8px] uppercase tracking-wider text-stone-600">
-        Contoh tampilan agregator
+        Portal-Hub · Beranda
       </p>
     </div>
   );
@@ -186,7 +186,7 @@ function MiniShorts({ color }: { color: string }) {
           </span>
         </div>
       ))}
-      <span className="sr-only">Contoh tampilan kanal Shorts</span>
+      <span className="sr-only">Pratinjau kanal Shorts</span>
     </div>
   );
 }
@@ -224,7 +224,7 @@ function MiniProducts({ color }: { color: string }) {
         ))}
       </div>
       <p className="text-right font-mono text-[8px] uppercase tracking-wider text-stone-600">
-        Contoh katalog
+        Katalog pilihan
       </p>
     </div>
   );
@@ -289,9 +289,9 @@ export default function Ecosystem({
         </div>
         <Reveal delay={0.2} className="max-w-sm">
           <p className="text-sm leading-relaxed text-stone-400">
-            Setiap brand punya kanal dan sistemnya sendiri. Yang menyatukan
-            semuanya ada di halaman ini: satu tempat untuk mengenal kelimanya,
-            lalu langsung menuju yang dicari.
+            Masing-masing brand punya kanal dan ritmenya sendiri. Halaman ini
+            mempertemukan kelimanya, supaya siapa pun bisa mengenal lebih dulu,
+            lalu langsung menuju kanal yang dicari.
           </p>
         </Reveal>
       </div>
@@ -394,7 +394,7 @@ export default function Ecosystem({
                         </a>
                       ) : (
                         <span className="inline-flex items-center gap-2 rounded-full border border-white/10 px-6 py-3.5 font-mono text-[11px] uppercase tracking-[0.18em] text-stone-600">
-                          {b.cta} — URL diatur di /admin
+                          Segera dibuka
                         </span>
                       )}
                     {igLink && (

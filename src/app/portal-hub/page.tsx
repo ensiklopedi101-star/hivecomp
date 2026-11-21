@@ -5,9 +5,9 @@ import PortalApp from "@/components/portal-app";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Portal-Hub (Prototipe) — Agregator Berita | HiveComp",
+  title: "Portal-Hub — Agregator Berita | HiveComp",
   description:
-    "Prototipe Portal-Hub: agregator berita nasional, hiburan, ekonomi, olahraga, teknologi, dan lifestyle. Bukan situs produksi portal-hub.online.",
+    "Portal-Hub merangkum berita nasional, hiburan, ekonomi, olahraga, teknologi, dan lifestyle dalam satu halaman. Versi lengkapnya ada di portal-hub.online.",
   robots: { index: false, follow: false },
 };
 

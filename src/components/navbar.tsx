@@ -52,12 +52,6 @@ export default function Navbar({ hiveLogo = "" }: { hiveLogo?: string }) {
 
         <div className="flex items-center gap-2.5">
           <a
-            href="/admin"
-            className="hidden items-center gap-1.5 rounded-full border border-white/15 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-stone-300 transition-colors duration-300 hover:border-hive hover:text-hive md:inline-flex"
-          >
-            Dashboard Admin
-          </a>
-          <a
             href="#kontak"
             className="group hidden items-center gap-2 rounded-full bg-hive px-5 py-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-ink transition-colors duration-300 hover:bg-hive-soft sm:inline-flex"
           >
@@ -86,7 +80,6 @@ export default function Navbar({ hiveLogo = "" }: { hiveLogo?: string }) {
             <div className="flex flex-col gap-1 px-5 py-4">
               {[
                 ...LINKS,
-                { href: "/admin", label: "Dashboard Admin", external: false },
                 { href: "#kontak", label: "Kerja Sama", external: false },
               ].map((l) => (
                 <a

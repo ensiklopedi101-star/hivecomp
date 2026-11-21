@@ -33,8 +33,8 @@ const PRIVACY = [
 ];
 
 const DISCLAIMER = [
-  "Informasi di situs ini merupakan pengenalan brand dan layanan. Isinya dapat diperbarui; contoh tampilan serta target berlabel ilustrasi bukan data performa atau jaminan hasil.",
-  "Postingan dan statistik kanal berasal dari sumber yang ditampilkan, jika konektornya aktif. Pembaruan berkala dapat berbeda dari angka terbaru di platform asal.",
+  "Informasi di situs ini merupakan pengenalan brand dan layanan yang dapat diperbarui sewaktu-waktu. Angka pada bagian target adalah sasaran internal, bukan capaian saat ini maupun jaminan hasil.",
+  "Postingan dan statistik kanal bersumber dari platform resmi masing-masing brand. Karena pembaruan berkala, angkanya dapat berbeda dari yang tampil di platform asal.",
   "Produk dan situs yang ditautkan memiliki ketentuan tersendiri. Harga, transaksi, serta kesepakatan kerja sama dikonfirmasi langsung dengan pengelola layanan terkait.",
   "Nama, logo, dan materi pihak lain tetap menjadi hak pemiliknya. Hubungi kami untuk koreksi informasi atau pelaporan hak atas materi.",
 ];

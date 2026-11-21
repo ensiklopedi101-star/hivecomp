@@ -56,7 +56,7 @@ export default function Contact({
   const CONTACT_ROWS = [
     { icon: Mail, label: "Email", value: contact.email },
     { icon: Phone, label: "WhatsApp", value: contact.whatsapp },
-    { icon: MapPin, label: "Markas", value: contact.location },
+    { icon: MapPin, label: "Lokasi", value: contact.location },
   ].filter((r) => r.value.trim().length > 0);
 
   const SOCIAL_LINKS = [
@@ -205,11 +205,11 @@ export default function Contact({
                     <CheckCircle2 className="h-7 w-7" />
                   </span>
                   <h3 className="mt-6 font-display text-2xl font-bold">
-                    Pesan terkirim!
+                    Pesan terkirim
                   </h3>
                   <p className="mt-2 max-w-xs text-sm leading-relaxed text-stone-400">
                     Terima kasih, {form.name.split(" ")[0] || "rekan"}. Pesan Anda
-                    telah tercatat di sistem kami.
+                    sudah kami terima dan akan ditindaklanjuti.
                   </p>
                   <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                     {waFollowupUrl && (

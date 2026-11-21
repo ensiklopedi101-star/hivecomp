@@ -35,7 +35,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     line3a: "Satu",
     line3b: "Pintu Masuk.",
     description:
-      "HiveComp menyatukan PopBeez, NusaBeez, Portal-Hub, BlinkBeez, dan E-Beez dalam satu halaman — audiens, mitra, dan pelanggan langsung diarahkan ke kanal yang tepat.",
+      "Lima brand media dan commerce dalam satu naungan — dari hiburan dan berita sampai marketplace. Satu halaman, satu pintu masuk bagi audiens, mitra, dan pelanggan.",
   },
   urls: {
     // Placeholder untuk demo — ganti dengan alamat resmi di /admin sebelum rilis.
@@ -68,10 +68,10 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   },
   instagram: { popbeez: "", nusabeez: "" },
   targets: [
-    { to: 1500, suffix: "+", label: "Konten Diproduksi / Tahun" },
-    { to: 500, suffix: " rb+", label: "Jangkauan Gabungan / Bulan" },
-    { to: 100, suffix: " rb+", label: "Pengikut di Seluruh Platform" },
-    { to: 5, suffix: "", label: "Brand dalam Satu Grup" },
+    { to: 1500, suffix: "+", label: "Konten diproduksi / tahun" },
+    { to: 500, suffix: " rb+", label: "Jangkauan gabungan / bulan" },
+    { to: 100, suffix: " rb+", label: "Pengikut di seluruh platform" },
+    { to: 5, suffix: "", label: "Brand dalam satu grup" },
   ],
 };
 
