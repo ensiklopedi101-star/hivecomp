@@ -1,0 +1,27 @@
+HiveComp — Banner Facebook Page PopBeez & NusaBeez
+
+FILE UNTUK DIUPLOAD
+- popbeez-facebook-cover.png / nusabeez-facebook-cover.png
+  Sampul Page, 1640x624 px (2x resolusi desktop 820x312). Disarankan PNG
+  karena teks tetap tajam setelah dikompres Facebook.
+- *.jpg : versi lebih ringan (~110 KB), kualitas 92.
+- Foto profil Page ada di folder terpisah: public/profil/ (3 varian per brand).
+
+FILE SUMBER
+- *.svg : vektor, semua teks sudah jadi kurva (tidak perlu instal font).
+  Bisa dibuka/diedit di Figma, Illustrator, atau Inkscape.
+
+PRATINJAU
+- *-preview.png : tampilan desktop dengan foto profil, crop HP 16:9,
+  dan panduan area aman.
+
+AREA AMAN
+- Logo, nama, tagline, dan badge "Powered by HIVECOMP" berada di area tengah
+  (x 265-1375 px) yang tetap terlihat di HP.
+- Pojok kiri bawah sengaja kosong: di desktop tertutup foto profil.
+
+CARA UPLOAD
+Facebook Page -> Edit foto sampul -> Unggah foto -> pilih file PNG -> Simpan.
+Jangan geser/zoom posisi saat Facebook meminta "Seret untuk memposisikan".
+
+Tipografi: Space Grotesk (SIL Open Font License).
