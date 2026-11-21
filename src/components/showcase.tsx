@@ -223,11 +223,12 @@ function PanelCard({
                 <p.icon className="h-5 w-5" />
               </span>
               <p className="mt-4 font-display text-sm font-bold text-stone-200">
-                {p.key === "blinkbeez" ? "Segera hadir" : "Belum terhubung"}
+                {p.key === "blinkbeez" ? "Segera hadir" : "Kanal resmi"}
               </p>
               <p className="mt-1.5 max-w-[230px] text-[12px] leading-relaxed text-stone-500">
-                {active?.reason ||
-                  "Sumber data belum dikonfigurasi. Kunjungi kanal resminya lewat tombol di bawah."}
+                {p.key === "blinkbeez"
+                  ? "Kanal video pendek sedang disiapkan. Ikuti kabarnya lewat tombol di bawah."
+                  : "Postingan terbaru belum dapat ditampilkan di sini. Ikuti kanal resminya lewat tombol di bawah."}
               </p>
             </div>
           )}
@@ -247,7 +248,7 @@ function PanelCard({
             </a>
           ) : !ig ? (
             <span className="flex w-full items-center justify-center gap-2 rounded-full border border-white/10 py-3 font-mono text-[10px] uppercase tracking-[0.2em] text-stone-600">
-              Tautan belum diisi di /admin
+              Kanal segera dibuka
             </span>
           ) : null}
           {ig && (
@@ -285,7 +286,7 @@ export default function Showcase({
   const realProducts = [
     {
       name: "E-Beez",
-      desc: "Marketplace yang sudah punya frontend & backend sendiri.",
+      desc: "Marketplace produk UMKM dengan sistem sendiri, dari katalog sampai pengiriman.",
       color: "#34d399",
       icon: ShoppingBag,
       url: urls["e-beez"],
@@ -293,7 +294,7 @@ export default function Showcase({
     },
     {
       name: "Portal-Hub",
-      desc: "Agregator berita mandiri bergaya Yahoo/MSN, sudah beroperasi.",
+      desc: "Agregator berita dengan tata letak ala portal besar, aktif setiap hari.",
       color: "#38bdf8",
       icon: Globe,
       url: urls["portal-hub"],
@@ -309,17 +310,18 @@ export default function Showcase({
             <SectionTag index="02" label="Showcase" />
             <Reveal delay={0.1}>
               <h2 className="mt-5 font-display text-4xl font-bold uppercase leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
-                Aktivitas terbaru,
+                Postingan terbaru,
                 <br />
-                <span className="text-outline-hive">langsung di sini.</span>
+                <span className="text-outline-hive">langsung dari sumbernya.</span>
               </h2>
             </Reveal>
           </div>
           <Reveal delay={0.2} className="max-w-sm">
             <p className="text-sm leading-relaxed text-stone-400">
-              Panel berikut menampilkan postingan asli begitu konektor aktif.
-              Selama belum, yang muncul hanya status dan tombol —{" "}
-              <span className="text-hive">tanpa angka perkiraan</span>.
+              Setiap panel menarik postingan dari kanal resmi masing-masing
+              brand. Angka reaksi dan komentar yang tampil berasal dari
+              platform,{" "}
+              <span className="text-hive">bukan perkiraan</span>.
             </p>
           </Reveal>
         </div>
@@ -378,7 +380,7 @@ export default function Showcase({
                   </a>
                 ) : (
                   <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-stone-600">
-                    URL belum diisi di /admin
+                    Tautan segera tersedia
                   </span>
                 )}
               </div>
@@ -387,9 +389,9 @@ export default function Showcase({
         </Reveal>
 
         <p className="mt-6 font-mono text-[10px] uppercase leading-relaxed tracking-[0.2em] text-stone-600">
-          Catatan: reaksi/komentar/view berasal dari API resmi hanya saat
-          konektor aktif. Reach, impressions, dan retensi adalah data privat
-          yang memerlukan izin terpisah — sengaja tidak ditampilkan.
+          Angka reaksi, komentar, dan tayangan diambil dari kanal resmi masing-masing
+          brand dan dapat berbeda dari tampilan di platform. Metrik internal seperti
+          jangkauan dan retensi tidak dipublikasikan.
         </p>
       </div>
     </section>

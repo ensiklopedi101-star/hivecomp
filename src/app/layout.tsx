@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.hivecomp.my.id"),
   title: "HiveComp — Lima Brand, Satu Pintu Masuk",
   description:
-    "HiveComp menyatukan PopBeez, NusaBeez, Portal-Hub, BlinkBeez, dan E-Beez dalam satu halaman — satu pintu masuk untuk seluruh kanal dan produk.",
+    "HiveComp menaungi PopBeez, NusaBeez, Portal-Hub, BlinkBeez, dan E-Beez — lima brand media dan commerce, satu pintu masuk untuk audiens, mitra, dan pelanggan.",
   keywords: [
     "HiveComp",
     "PopBeez",

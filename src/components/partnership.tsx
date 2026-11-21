@@ -88,9 +88,8 @@ export default function Partnership() {
 
       <Reveal delay={0.15}>
         <p className="mt-5 font-mono text-[10px] uppercase leading-relaxed tracking-[0.2em] text-stone-600">
-          Tiga kategori ini adalah pintu masuk awal yang saya siapkan pada
-          formulir — bukan daftar layanan final. Kebutuhan lain tetap bisa
-          dituliskan bebas.
+          Tiga kategori di atas adalah pintu masuk paling umum. Kebutuhan lain
+          tetap bisa dituliskan bebas pada formulir.
         </p>
       </Reveal>
 

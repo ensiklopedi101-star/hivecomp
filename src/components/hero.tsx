@@ -18,7 +18,7 @@ const line: Variants = {
 const HERO_STATS = [
   { value: "05", label: "Brand dalam grup" },
   { value: "02", label: "Produk beroperasi" },
-  { value: "01", label: "Backend bersama Pop & Nusa" },
+  { value: "01", label: "Infrastruktur bersama" },
   { value: "01", label: "Pintu masuk audiens" },
 ];
 

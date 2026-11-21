@@ -159,11 +159,11 @@ export default function BrandPage({
             <>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <h2 className="font-display text-3xl font-bold uppercase tracking-tight sm:text-4xl">
-                  Contoh news card
+                  News card terbaru
                 </h2>
                 <p className="max-w-sm font-mono text-[10px] uppercase leading-relaxed tracking-[0.2em] text-stone-500">
-                  PROTOTIPE — contoh tata letak kartu, bukan postingan dari akun
-                  {" "}{brand.name} dan bukan data dari backend Anda
+                  Tata letak news card yang dipakai di kanal resmi {brand.name}.
+                  Postingan asli tampil otomatis setelah kanal terhubung.
                 </p>
               </div>
               <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -190,7 +190,8 @@ export default function BrandPage({
                   Shorts <span style={{ color: brand.color }}>terbaru</span>
                 </h2>
                 <p className="max-w-sm font-mono text-[10px] uppercase leading-relaxed tracking-[0.2em] text-stone-500">
-                  PROTOTIPE tata letak — BlinkBeez belum memiliki kanal
+                  Tata letak kanal Shorts. Video tampil di sini begitu kanal
+                  resminya tayang.
                 </p>
               </div>
               <div className="mt-10 grid grid-cols-2 gap-5 lg:grid-cols-4">
@@ -250,7 +251,8 @@ export default function BrandPage({
                   Produk <span style={{ color: brand.color }}>unggulan</span>
                 </h2>
                 <p className="max-w-sm font-mono text-[10px] uppercase leading-relaxed tracking-[0.2em] text-stone-500">
-                  PROTOTIPE katalog — bukan produk dari E-Beez Anda
+                  Tata letak katalog E-Beez. Pilihan produk lengkap ada di
+                  marketplace-nya.
                 </p>
               </div>
               <div className="mt-10 grid grid-cols-2 gap-5 lg:grid-cols-4">

@@ -21,35 +21,35 @@ const NODES: Node[] = [
   {
     name: "PopBeez",
     title: "News card hiburan",
-    desc: "Facebook Page untuk drakor, dracin, idol, manga, dan donghua. Berbagi satu backend dengan NusaBeez.",
+    desc: "Kanal Facebook untuk drakor, dracin, idol, manga, dan donghua, dengan sistem penerbitan yang sama seperti NusaBeez.",
     color: "#ff4d8d",
     icon: Heart,
   },
   {
     name: "NusaBeez",
     title: "News card nasional",
-    desc: "Facebook Page untuk kabar nasional. Satu backend bersama PopBeez, jalur produksi tersendiri.",
+    desc: "Kanal Facebook untuk kabar nasional, dengan jalur produksi tersendiri di atas sistem yang sama dengan PopBeez.",
     color: "#ff453a",
     icon: Flag,
   },
   {
     name: "Portal-Hub",
     title: "Agregator berita mandiri",
-    desc: "Portal berita bergaya Yahoo/MSN yang sudah beroperasi di www.portal-hub.online.",
+    desc: "Portal berita dengan tata letak ala Yahoo dan MSN, aktif di www.portal-hub.online.",
     color: "#38bdf8",
     icon: Globe,
   },
   {
     name: "BlinkBeez",
     title: "Kanal YouTube Shorts",
-    desc: "Rencana kanal video pendek. Saat ini kanal belum berjalan.",
+    desc: "Video pendek 60 detik berisi potongan berita dan hiburan, sedang disiapkan untuk tayang.",
     color: "#a78bfa",
     icon: YoutubeIcon,
   },
   {
     name: "E-Beez",
     title: "Marketplace",
-    desc: "Sudah punya frontend dan backend sendiri — diakses langsung lewat subdomainnya.",
+    desc: "Marketplace dengan sistemnya sendiri, diakses lewat subdomain E-Beez.",
     color: "#34d399",
     icon: ShoppingBag,
   },
@@ -157,10 +157,10 @@ export default function Flywheel() {
           </Reveal>
           <Reveal delay={0.2}>
             <p className="mt-6 max-w-2xl text-sm leading-relaxed text-stone-400 sm:text-base">
-              Ini peta kanal yang dinaungi HiveComp —{" "}
-              <strong className="text-stone-200">bukan diagram alur data otomatis</strong>.
-              Tiap produk berdiri dengan sistemnya sendiri; yang disatukan adalah
-              identitas dan pintu masuk audiens.
+              Lima kanal dalam satu naungan. Tiap produk berjalan dengan
+              sistemnya sendiri; yang kami satukan adalah{" "}
+              <strong className="text-stone-200">identitas, standar kerja, dan
+              pintu masuk audiens</strong>.
             </p>
           </Reveal>
         </div>
@@ -207,8 +207,8 @@ export default function Flywheel() {
                 <RefreshCw className="mt-0.5 h-5 w-5 shrink-0 animate-rotate-slow text-hive" />
                 <p className="text-sm leading-relaxed text-stone-300">
                   <span className="font-semibold text-hive">Satu halaman, semua pintu masuk — </span>
-                  pengunjung cukup sampai di hivecomp.my.id untuk menemukan
-                  seluruh kanal, lalu langsung menuju produk yang dicari.
+                  pengunjung cukup datang ke hivecomp.my.id untuk menemukan
+                  seluruh kanal, lalu diarahkan ke produk yang dicari.
                 </p>
               </div>
             </Reveal>

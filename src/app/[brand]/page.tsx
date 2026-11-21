@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const info = BRANDS[brand as BrandSlug];
   if (!info) return { title: "Tidak ditemukan — HiveComp" };
   return {
-    title: `${info.name} (Prototipe) — HiveComp`,
+    title: `${info.name} — HiveComp`,
     description: info.tagline,
     robots: { index: false, follow: false },
   };
