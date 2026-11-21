@@ -84,6 +84,7 @@ export default function AdminDashboard({
   guidance,
   checks,
   notes,
+  dbError = "",
 }: {
   initialSettings: SiteSettings;
   leads: LeadDTO[];
@@ -91,6 +92,7 @@ export default function AdminDashboard({
   guidance: ConnectorGuidanceRow[];
   checks: PreflightCheck[];
   notes: string[];
+  dbError?: string;
 }) {
   const router = useRouter();
   const [tab, setTab] = useState<Tab>("rilis");
@@ -250,6 +252,26 @@ export default function AdminDashboard({
       </header>
 
       <div className="mx-auto max-w-6xl px-5 pb-28 pt-8">
+        {dbError && (
+          <div className="mb-6 rounded-2xl border border-nusa/40 bg-nusa/10 p-5">
+            <p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-nusa">
+              <X className="h-3.5 w-3.5" /> Database bermasalah
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-stone-200">
+              Panel terbuka, tetapi data pesan, artikel &amp; panduan konektor
+              belum bisa dibaca. Periksa{" "}
+              <span className="font-mono text-hive">/api/health</span> dan variabel{" "}
+              <span className="font-mono text-hive">DATABASE_URL</span> (atau env
+              var berakhiran{" "}
+              <span className="font-mono text-hive">_DATABASE_URL</span> dari
+              integrasi Neon) di Vercel, lalu Redeploy.
+            </p>
+            <p className="mt-3 break-words rounded-xl bg-ink/50 px-4 py-3 font-mono text-[11px] leading-relaxed text-stone-400">
+              {dbError}
+            </p>
+          </div>
+        )}
+
         {/* Tabs */}
         <div className="flex flex-wrap gap-2">
           {TABS.map((t) => (

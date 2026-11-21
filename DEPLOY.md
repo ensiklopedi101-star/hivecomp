@@ -44,6 +44,12 @@ Alternatif cepat kalau GitHub CLI sudah login: `gh repo create hivecomp --public
    **Postgres (Neon)** → **Continue**.
 2. Vercel otomatis menambahkan `DATABASE_URL` / `POSTGRES_URL` ke
    Environment Variables untuk **Production, Preview, dan Development**.
+   **Perhatian:** integrasi Marketplace (Neon/Supabase) sering menambahkan
+   **prefix nama database** pada variabelnya — mis. `HIVE_DATABASE_URL`,
+   `HIVE_POSTGRES_URL`, `HIVE_DATABASE_URL_UNPOOLED` — sehingga `DATABASE_URL`
+   biasa tidak ada. Aplikasi sudah memindai varian ber-prefix tersebut, jadi
+   tidak perlu rename manual; cukup pastikan variabelnya terpasang untuk
+   **Production** lalu **Redeploy**.
 3. Pilih region terdekat (Singapore `Sin1` bila tersedia) agar latensi rendah
    agar latensi tetap rendah bagi pengunjung lokal.
 
@@ -130,11 +136,16 @@ Actions — jangan dua-duanya aktif untuk production.
 | Gejala | Penyebab & solusi |
 | --- | --- |
 | Build gagal: `DATABASE_URL is required` | Koneksi sekarang lazy, jadi bukan ini. Cek `npm run build` lokal; biasanya error TypeScript. |
-| `/api/health` → `{"ok":false}` | Postgres belum ter-attach, atau memakai connection string **non-pooled**. Cek Storage → Connect → copy **pooled** URL. |
+| `/api/health` → `{"ok":false,"database":"not_configured"}` | Tidak ada connection string sama sekali. Lihat `envKeysFound` di respons: kalau kosong, integrasi database belum terpasang untuk **Production** → Storage → Connect Database → **Redeploy**. |
+| `/api/health` → `{"ok":false,"database":"error"}` | Koneksi ditolak. Pesan `error` menyebut penyebab asli (mis. `28P01 password authentication failed`, `ECONNREFUSED`, `ENOTFOUND`). Untuk Neon: cek apakah database auto-suspend atau password di secret integrasi sudah basi → re-sync integrasi / tempel URL pooled baru, lalu Redeploy. |
+| `/api/health` → `{"ok":false}` tanpa keterangan | Build lama. Deploy ulang dari `main` terbaru — endpoint ini sekarang selalu menyertakan `database`, `envKey`, dan `error`. |
+| `/admin` menampilkan banner **“Database bermasalah”** | Panel sengaja tetap terbuka; isi banner menunjukkan error database yang sebenarnya. Perbaiki koneksi, lalu refresh. |
+| `/admin` blank / 500 | Sejak perbaikan, `/admin` tidak boleh 500 karena database. Kalau masih terjadi, cek log Vercel — kemungkinan build lama (sebelum perbaikan) yang masih aktif. |
 | Halaman kosong / 500 saat pertama dibuka | Cold start pertama sedang membuat tabel. Refresh 1–2 kali, lalu cek `/api/health`. |
 | `/admin` tidak mau login | `ADMIN_PASSWORD` berubah setelah cookie lama diterbitkan → logout, lalu login lagi. |
 | Gambar berita tidak muncul | Demo memakai URL Pexels publik; pastikan domain gambar tidak diblokir jaringan. Ganti lewat admin. |
 | `ADMIN_PASSWORD` baru tidak berlaku | Vercel mewajibkan **Redeploy** setelah mengubah env var. |
+| Login admin selalu gagal walau password benar | Sebelumnya env `ADMIN_PASSWORD` yang **kosong** membuat password menjadi string kosong (form menolak input kosong). Sekarang nilai kosong/spasi dianggap belum diset → password jatuh ke `hive-admin`. |
 
 ---
 

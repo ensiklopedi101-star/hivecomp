@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { desc } from "drizzle-orm";
-import { db } from "@/db";
+import { db, describeDatabaseError } from "@/db";
 import { ensureSchema } from "@/db/ensure";
 import { articles, connectorGuidance, leads } from "@/db/schema";
 import { isAdmin, usingDefaultPassword } from "@/lib/auth";
@@ -23,23 +23,30 @@ export default async function AdminPage() {
     return <AdminLogin showDefaultHint={usingDefaultPassword()} />;
   }
 
-  await ensureSchema();
-  const [siteSettings, leadRows, articleRows, guidanceRows] = await Promise.all([
-    getSettings(),
-    db.select().from(leads).orderBy(desc(leads.createdAt)).limit(100),
-    db.select().from(articles).orderBy(desc(articles.createdAt)).limit(200),
-    db.select().from(connectorGuidance).catch(() => []),
-  ]);
+  // Panel admin tidak boleh ikut mati hanya karena query database gagal
+  // (mis. database belum terhubung / env var belum terbaca). getSettings()
+  // sudah punya fallback internal; sisanya di-fetch defensif dan error-nya
+  // ditampilkan sebagai banner di dashboard.
+  let leadRows: (typeof leads.$inferSelect)[] = [];
+  let articleRows: (typeof articles.$inferSelect)[] = [];
+  let guidanceRows: (typeof connectorGuidance.$inferSelect)[] = [];
+  let dbError = "";
 
-  const guidanceDTOs: ConnectorGuidanceRow[] = guidanceRows.map((g) => ({
-    id: g.id,
-    brand: g.brand,
-    method: g.method,
-    summary: g.summary,
-    steps: g.steps,
-    credentials: g.credentials,
-    tradeoffs: g.tradeoffs,
-  }));
+  try {
+    await ensureSchema();
+    const [l, a, g] = await Promise.all([
+      db.select().from(leads).orderBy(desc(leads.createdAt)).limit(100),
+      db.select().from(articles).orderBy(desc(articles.createdAt)).limit(200),
+      db.select().from(connectorGuidance).catch(() => []),
+    ]);
+    leadRows = l;
+    articleRows = a;
+    guidanceRows = g;
+  } catch (error) {
+    dbError = describeDatabaseError(error);
+  }
+
+  const siteSettings = await getSettings();
 
   const leadDTOs: LeadDTO[] = leadRows.map((l) => ({
     id: l.id,
@@ -60,6 +67,16 @@ export default async function AdminPage() {
     dateLabel: formatDate(a.createdAt),
   }));
 
+  const guidanceDTOs: ConnectorGuidanceRow[] = guidanceRows.map((g) => ({
+    id: g.id,
+    brand: g.brand,
+    method: g.method,
+    summary: g.summary,
+    steps: g.steps,
+    credentials: g.credentials,
+    tradeoffs: g.tradeoffs,
+  }));
+
   return (
     <AdminDashboard
       initialSettings={siteSettings}
@@ -68,6 +85,7 @@ export default async function AdminPage() {
       guidance={guidanceDTOs}
       checks={buildPreflight(siteSettings, !usingDefaultPassword())}
       notes={PREFLIGHT_NOTES}
+      dbError={dbError}
     />
   );
 }

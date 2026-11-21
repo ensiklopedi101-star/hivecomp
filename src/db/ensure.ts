@@ -81,88 +81,109 @@ const GUIDANCE: GuidanceRow[] = [
  */
 let ready: Promise<void> | null = null;
 
+// Arbitrary but stable key for pg_advisory_xact_lock — mencegah dua cold start
+// bersamaan membuat tabel/seed secara balapan.
+const LOCK_KEY = 791_97_61;
+
 async function bootstrap(): Promise<void> {
-  await db.execute(sql`
-    CREATE TABLE IF NOT EXISTS leads (
-      id serial PRIMARY KEY,
-      name varchar(120) NOT NULL,
-      contact varchar(160) NOT NULL,
-      interest varchar(80) NOT NULL,
-      message text NOT NULL,
-      created_at timestamptz NOT NULL DEFAULT now()
-    )
-  `);
+  await db.transaction(async (tx) => {
+    await tx.execute(sql`select pg_advisory_xact_lock(${LOCK_KEY})`);
 
-  await db.execute(sql`
-    CREATE TABLE IF NOT EXISTS settings (
-      key varchar(40) PRIMARY KEY,
-      value jsonb NOT NULL,
-      updated_at timestamptz NOT NULL DEFAULT now()
-    )
-  `);
+    await tx.execute(sql`
+      CREATE TABLE IF NOT EXISTS leads (
+        id serial PRIMARY KEY,
+        name varchar(120) NOT NULL,
+        contact varchar(160) NOT NULL,
+        interest varchar(80) NOT NULL,
+        message text NOT NULL,
+        created_at timestamptz NOT NULL DEFAULT now()
+      )
+    `);
 
-  await db.execute(sql`
-    CREATE TABLE IF NOT EXISTS articles (
-      id serial PRIMARY KEY,
-      title varchar(220) NOT NULL,
-      category varchar(40) NOT NULL,
-      excerpt text NOT NULL,
-      image_url text NOT NULL DEFAULT '',
-      source varchar(120) NOT NULL DEFAULT 'Portal-Hub',
-      created_at timestamptz NOT NULL DEFAULT now()
-    )
-  `);
+    await tx.execute(sql`
+      CREATE TABLE IF NOT EXISTS settings (
+        key varchar(40) PRIMARY KEY,
+        value jsonb NOT NULL,
+        updated_at timestamptz NOT NULL DEFAULT now()
+      )
+    `);
 
-  await db.execute(sql`
-    CREATE TABLE IF NOT EXISTS connector_guidance (
-      id serial PRIMARY KEY,
-      brand varchar(40) NOT NULL,
-      method varchar(120) NOT NULL,
-      summary text NOT NULL,
-      steps text NOT NULL,
-      credentials text NOT NULL,
-      tradeoffs text NOT NULL,
-      created_at timestamptz NOT NULL DEFAULT now()
-    )
-  `);
+    await tx.execute(sql`
+      CREATE TABLE IF NOT EXISTS articles (
+        id serial PRIMARY KEY,
+        title varchar(220) NOT NULL,
+        category varchar(40) NOT NULL,
+        excerpt text NOT NULL,
+        image_url text NOT NULL DEFAULT '',
+        source varchar(120) NOT NULL DEFAULT 'Portal-Hub',
+        created_at timestamptz NOT NULL DEFAULT now()
+      )
+    `);
 
-  // Makes demo seeding idempotent even if several cold starts race.
-  await db.execute(sql`
-    CREATE UNIQUE INDEX IF NOT EXISTS articles_title_unique ON articles (title)
-  `);
-  await db.execute(sql`
-    CREATE UNIQUE INDEX IF NOT EXISTS connector_guidance_brand_method_unique
-    ON connector_guidance (brand, method)
-  `);
+    await tx.execute(sql`
+      CREATE TABLE IF NOT EXISTS connector_guidance (
+        id serial PRIMARY KEY,
+        brand varchar(40) NOT NULL,
+        method varchar(120) NOT NULL,
+        summary text NOT NULL,
+        steps text NOT NULL,
+        credentials text NOT NULL,
+        tradeoffs text NOT NULL,
+        created_at timestamptz NOT NULL DEFAULT now()
+      )
+    `);
 
-  await db
-    .insert(connectorGuidance)
-    .values(GUIDANCE)
-    .onConflictDoUpdate({
-      target: [connectorGuidance.brand, connectorGuidance.method],
-      set: {
-        summary: sql`excluded.summary`,
-        steps: sql`excluded.steps`,
-        credentials: sql`excluded.credentials`,
-        tradeoffs: sql`excluded.tradeoffs`,
-      },
-    });
+    // Index unik ini hanya "bonus" idempoten untuk seeding. Kalau database lama
+    // sudah berisi duplikat, CREATE INDEX akan gagal — jangan sampai
+    // menggagalkan seluruh bootstrap.
+    await tx.execute(sql`
+      DO $$
+      BEGIN
+        BEGIN
+          CREATE UNIQUE INDEX IF NOT EXISTS articles_title_unique ON articles (title);
+        EXCEPTION WHEN others THEN
+          RAISE NOTICE 'articles_title_unique dilewati: %', SQLERRM;
+        END;
+        BEGIN
+          CREATE UNIQUE INDEX IF NOT EXISTS connector_guidance_brand_method_unique
+          ON connector_guidance (brand, method);
+        EXCEPTION WHEN others THEN
+          RAISE NOTICE 'connector_guidance_brand_method_unique dilewati: %', SQLERRM;
+        END;
+      END
+      $$
+    `);
 
-  await db
-    .insert(articles)
-    .values(
-      SAMPLE_ARTICLES.map((a, i) => ({
-        title: a.title,
-        category: a.category,
-        excerpt: a.excerpt,
-        imageUrl: a.imageUrl,
-        source: a.source,
-        createdAt: new Date(Date.now() - i * 3_600_000),
-      })),
-    )
-    .onConflictDoNothing({ target: articles.title });
+    await tx
+      .insert(connectorGuidance)
+      .values(GUIDANCE)
+      .onConflictDoUpdate({
+        target: [connectorGuidance.brand, connectorGuidance.method],
+        set: {
+          summary: sql`excluded.summary`,
+          steps: sql`excluded.steps`,
+          credentials: sql`excluded.credentials`,
+          tradeoffs: sql`excluded.tradeoffs`,
+        },
+      });
+
+    // Seed artikel demo hanya saat tabel benar-benar kosong. Lock advisory di
+    // atas memastikan tidak ada dua cold start yang menyisipkan bersamaan.
+    const existing = await tx.select({ id: articles.id }).from(articles).limit(1);
+    if (existing.length === 0) {
+      await tx.insert(articles).values(
+        SAMPLE_ARTICLES.map((a, i) => ({
+          title: a.title,
+          category: a.category,
+          excerpt: a.excerpt,
+          imageUrl: a.imageUrl,
+          source: a.source,
+          createdAt: new Date(Date.now() - i * 3_600_000),
+        })),
+      );
+    }
+  });
 }
-
 export function ensureSchema(): Promise<void> {
   if (!ready) {
     ready = bootstrap().catch((error) => {
