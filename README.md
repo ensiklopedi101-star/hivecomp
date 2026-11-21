@@ -92,12 +92,8 @@ Tidak perlu `drizzle-kit push` atau `psql` di Vercel. Koneksi dibuat *lazy*,
 sehingga build tetap sukses walau env database belum di-attach.
 
 `DATABASE_URL` / `POSTGRES_URL` dibaca otomatis dari integrasi Vercel Postgres
-(Neon). Integrasi Marketplace sering memakai **prefix** (mis.
-`HIVE_DATABASE_URL`), jadi aplikasi juga memindai variabel berakhiran
-`_DATABASE_URL` / `_POSTGRES_URL` dan mengutamakan varian **pooled**. Pool
-dibatasi `max: 3` + dukungan SSL untuk serverless. Cek kesiapan di
-`/api/health` — responsnya menyebut nama env var yang dipakai (`envKey`) dan,
-bila gagal, penyebabnya (tanpa membocorkan kredensial).
+(Neon). Pool dibatasi `max: 3` + dukungan SSL untuk serverless — pakai
+connection string **pooled** bila tersedia. Cek kesiapan di `/api/health`.
 
 ## Pengembangan Lokal
 
