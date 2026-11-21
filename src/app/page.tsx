@@ -26,7 +26,7 @@ export default async function Page() {
       <Marquee />
       <Ecosystem urls={s.urls} logos={s.logos} instagram={s.instagram} />
       <Showcase urls={s.urls} logos={s.logos} instagram={s.instagram} data={showcase} />
-      <Flywheel />
+      <Flywheel logos={s.logos} />
       <Partnership />
       <Stats targets={s.targets} />
       <Contact contact={s.contact} socials={s.socials} />

@@ -286,17 +286,19 @@ export default function Showcase({
   const realProducts = [
     {
       name: "E-Beez",
-      desc: "Marketplace produk UMKM dengan sistem sendiri, dari katalog sampai pengiriman.",
+      desc: "Etalase produk UMKM: katalog, pembayaran, dan pengiriman dalam satu alur.",
       color: "#34d399",
       icon: ShoppingBag,
+      logo: logos["e-beez"],
       url: urls["e-beez"],
       label: "Kunjungi E-Beez",
     },
     {
       name: "Portal-Hub",
-      desc: "Agregator berita dengan tata letak ala portal besar, aktif setiap hari.",
+      desc: "Rangkuman berita dari berbagai media, diperbarui setiap hari.",
       color: "#38bdf8",
       icon: Globe,
+      logo: logos["portal-hub"],
       url: urls["portal-hub"],
       label: "Buka Portal-Hub",
     },
@@ -351,15 +353,22 @@ export default function Showcase({
                 className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-white/10 bg-[#0c0c0e] p-6"
               >
                 <div className="flex items-center gap-4">
-                  <span
-                    className="clip-hex grid h-12 w-12 shrink-0 place-items-center"
-                    style={{
-                      background: `color-mix(in srgb, ${r.color} 15%, transparent)`,
-                      color: r.color,
-                    }}
-                  >
-                    <r.icon className="h-5 w-5" />
-                  </span>
+                  {r.logo ? (
+                    <span className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl border border-white/10 bg-white/[0.03]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={r.logo} alt={`Logo ${r.name}`} className="h-full w-full object-cover" />
+                    </span>
+                  ) : (
+                    <span
+                      className="clip-hex grid h-12 w-12 shrink-0 place-items-center"
+                      style={{
+                        background: `color-mix(in srgb, ${r.color} 15%, transparent)`,
+                        color: r.color,
+                      }}
+                    >
+                      <r.icon className="h-5 w-5" />
+                    </span>
+                  )}
                   <div>
                     <p className="font-display text-lg font-bold">{r.name}</p>
                     <p className="mt-0.5 max-w-sm text-[12px] leading-relaxed text-stone-500">
