@@ -11,6 +11,8 @@ const BRANDS = [
   { name: "E-Beez", slug: "e-beez", color: "#34d399" },
 ] as const;
 
+const WORDMARK = ["H", "I", "V", "E", "C", "O", "M", "P"] as const;
+
 export default function Footer({ urls, hiveLogo = "" }: { urls: SiteSettings["urls"]; hiveLogo?: string }) {
   return (
     <footer className="relative overflow-hidden border-t border-white/10 bg-coal/60">
@@ -37,7 +39,15 @@ export default function Footer({ urls, hiveLogo = "" }: { urls: SiteSettings["ur
           <p>www.hivecomp.my.id</p>
         </div>
       </div>
-      <div aria-hidden className="select-none overflow-hidden"><p className="text-outline translate-y-[22%] whitespace-nowrap text-center font-display text-[19vw] font-bold leading-[0.8] opacity-25">HIVECOMP</p></div>
+      <div aria-hidden className="word-glow-wrap select-none">
+        <p className="word-glow translate-y-[22%] whitespace-nowrap text-center font-display text-[19vw] font-bold leading-[0.8]">
+          {WORDMARK.map((letter, i) => (
+            <span key={`${letter}-${i}`} data-glow={i < 4 ? "white" : "gold"}>
+              {letter}
+            </span>
+          ))}
+        </p>
+      </div>
     </footer>
   );
 }
