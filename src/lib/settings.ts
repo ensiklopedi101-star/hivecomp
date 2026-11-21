@@ -4,6 +4,7 @@ import { ensureSchema } from "@/db/ensure";
 import { settings } from "@/db/schema";
 import type { BrandSlug } from "./brands";
 import { SELECTED_LOGOS } from "./logo-concepts";
+import { igUrl } from "./instagram";
 
 export type SiteSettings = {
   hero: {
@@ -21,6 +22,8 @@ export type SiteSettings = {
   logos: Record<BrandSlug, string>;
   contact: { email: string; whatsapp: string; location: string };
   socials: { facebook: string; instagram: string; youtube: string };
+  /** Akun Instagram per brand (URL profil atau @handle). */
+  instagram: Record<"popbeez" | "nusabeez", string>;
   targets: { to: number; suffix: string; label: string }[];
 };
 
@@ -63,6 +66,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     instagram: "",
     youtube: "",
   },
+  instagram: { popbeez: "", nusabeez: "" },
   targets: [
     { to: 1500, suffix: "+", label: "Konten Diproduksi / Tahun" },
     { to: 500, suffix: " rb+", label: "Jangkauan Gabungan / Bulan" },
@@ -73,6 +77,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 
 const str = (v: unknown, fallback: string, max = 400) =>
   typeof v === "string" && v.trim() ? v.trim().slice(0, max) : fallback;
+
+
 
 /** Logo hanya boleh berupa data URL gambar (upload admin) atau URL http(s). */
 const logo = (v: unknown, fallback: string) => {
@@ -143,6 +149,10 @@ export async function getSettings(): Promise<SiteSettings> {
       facebook: str(raw.socials?.facebook, d.socials.facebook, 300),
       instagram: str(raw.socials?.instagram, d.socials.instagram, 300),
       youtube: str(raw.socials?.youtube, d.socials.youtube, 300),
+    },
+    instagram: {
+      popbeez: igUrl(raw.instagram?.popbeez),
+      nusabeez: igUrl(raw.instagram?.nusabeez),
     },
     targets,
   };

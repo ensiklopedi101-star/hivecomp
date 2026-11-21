@@ -21,11 +21,11 @@ export default async function Page() {
     <main id="konten" className="relative">
       <SmoothScroll />
       <SiteChrome />
-      <Navbar portalHubUrl={s.urls["portal-hub"]} hiveLogo={s.hiveLogo} />
+      <Navbar hiveLogo={s.hiveLogo} />
       <Hero hero={s.hero} whatsapp={s.contact.whatsapp} />
       <Marquee />
-      <Ecosystem urls={s.urls} logos={s.logos} />
-      <Showcase urls={s.urls} logos={s.logos} data={showcase} />
+      <Ecosystem urls={s.urls} logos={s.logos} instagram={s.instagram} />
+      <Showcase urls={s.urls} logos={s.logos} instagram={s.instagram} data={showcase} />
       <Flywheel />
       <Partnership />
       <Stats targets={s.targets} />

@@ -16,6 +16,7 @@ import {
   LogOut,
   MessageCircle,
   Newspaper,
+  Plug,
   Plus,
   Save,
   Settings2,
@@ -25,6 +26,7 @@ import {
 } from "lucide-react";
 import type { SiteSettings } from "@/lib/settings";
 import type { PreflightCheck } from "@/lib/preflight";
+import type { ConnectorGuidanceRow } from "@/lib/connector-guidance-types";
 import { BRANDS, BRAND_SLUGS } from "@/lib/brands";
 import { buildWhatsAppUrl, isLikelyPhoneNumber } from "@/lib/whatsapp";
 import {
@@ -34,7 +36,7 @@ import {
   type LeadDTO,
 } from "@/lib/shared";
 
-type Tab = "rilis" | "tampilan" | "berita" | "pesan";
+type Tab = "rilis" | "tampilan" | "konektor" | "berita" | "pesan";
 type SaveState = "idle" | "saving" | "saved" | "error";
 
 const inputCls =
@@ -79,16 +81,16 @@ export default function AdminDashboard({
   initialSettings,
   leads,
   articles,
+  guidance,
   checks,
   notes,
-  dbError = "",
 }: {
   initialSettings: SiteSettings;
   leads: LeadDTO[];
   articles: ArticleDTO[];
+  guidance: ConnectorGuidanceRow[];
   checks: PreflightCheck[];
   notes: string[];
-  dbError?: string;
 }) {
   const router = useRouter();
   const [tab, setTab] = useState<Tab>("rilis");
@@ -204,6 +206,7 @@ export default function AdminDashboard({
   const TABS: { id: Tab; label: string; icon: typeof Settings2; count?: number }[] = [
     { id: "rilis", label: "Sebelum Rilis", icon: ListChecks, count: pendingRequired },
     { id: "tampilan", label: "Tampilan & URL", icon: Settings2 },
+    { id: "konektor", label: "Hubungkan Showcase", icon: Plug },
     { id: "pesan", label: "Pesan Masuk", icon: Inbox, count: leads.length },
     { id: "berita", label: "Artikel Demo (Prototipe)", icon: Newspaper, count: articles.length },
   ];
@@ -227,6 +230,7 @@ export default function AdminDashboard({
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <Link href="/unduhan" className="inline-flex items-center gap-2 rounded-full bg-hive px-4 py-2 font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-ink transition-colors hover:bg-hive-soft">Pusat Unduhan <Download className="h-3 w-3" /></Link>
             <Link href="/studio-logo" className="inline-flex items-center gap-2 rounded-full border border-hive/30 bg-hive/5 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.15em] text-hive transition-colors hover:bg-hive/10">Studio Logo <ArrowUpRight className="h-3 w-3" /></Link>
             <Link
               href="/"
@@ -246,25 +250,6 @@ export default function AdminDashboard({
       </header>
 
       <div className="mx-auto max-w-6xl px-5 pb-28 pt-8">
-        {dbError && (
-          <div className="mb-6 rounded-2xl border border-nusa/40 bg-nusa/10 p-5">
-            <p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-nusa">
-              <X className="h-3.5 w-3.5" /> Database bermasalah
-            </p>
-            <p className="mt-2 text-sm leading-relaxed text-stone-200">
-              Panel terbuka, tetapi data pesan &amp; artikel belum bisa dibaca.
-              Periksa <span className="font-mono text-hive">/api/health</span> dan
-              variabel <span className="font-mono text-hive">DATABASE_URL</span>{" "}
-              (atau env var berakhiran{" "}
-              <span className="font-mono text-hive">_DATABASE_URL</span> dari
-              integrasi Neon) di Vercel, lalu Redeploy.
-            </p>
-            <p className="mt-3 break-words rounded-xl bg-ink/50 px-4 py-3 font-mono text-[11px] leading-relaxed text-stone-400">
-              {dbError}
-            </p>
-          </div>
-        )}
-
         {/* Tabs */}
         <div className="flex flex-wrap gap-2">
           {TABS.map((t) => (
@@ -447,6 +432,26 @@ export default function AdminDashboard({
                   </div>
                 </Field>
               ))}
+              <div className="grid gap-5 border-t border-white/10 pt-5 sm:grid-cols-2">
+                {(["popbeez", "nusabeez"] as const).map((k) => (
+                  <Field key={k} label={`Instagram ${BRANDS[k].name} (opsional)`}>
+                    <input
+                      className={inputCls}
+                      placeholder="@popbeez  atau  https://www.instagram.com/popbeez/"
+                      value={s.instagram[k]}
+                      maxLength={300}
+                      onChange={(e) =>
+                        setS({ ...s, instagram: { ...s.instagram, [k]: e.target.value } })
+                      }
+                    />
+                  </Field>
+                ))}
+                <p className="text-[11px] leading-relaxed text-stone-500 sm:col-span-2">
+                  Cukup isi <code className="font-mono text-hive">@handle</code> — alamat lengkapnya dibuat otomatis.
+                  Tombol Instagram langsung muncul di kartu Ekosistem dan panel Showcase. Untuk menampilkan
+                  postingannya juga, lihat tab <span className="text-stone-300">Hubungkan Showcase</span>.
+                </p>
+              </div>
             </Card>
 
             <Card
@@ -657,6 +662,106 @@ export default function AdminDashboard({
                 </button>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* ============ TAB: KONEKTOR SHOWCASE ============ */}
+        {tab === "konektor" && (
+          <div className="mt-8 space-y-6">
+            <Card
+              title="Hubungkan Showcase PopBeez & NusaBeez"
+              desc="Panel Showcase di landing page menampilkan postingan asli begitu konektor aktif. Pilih sumber datanya — Meta Graph API, atau backend PopBeez & NusaBeez Anda sendiri. Keduanya tidak harus dipakai bersamaan."
+            >
+              <div className="space-y-3">
+                {guidance.length === 0 && (
+                  <p className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-stone-500">
+                    Panduan belum tersedia. Buka halaman ini lagi setelah tabel koneksi terbentuk otomatis di database.
+                  </p>
+                )}
+                {guidance.map((g) => (
+                  <div
+                    key={`${g.brand}-${g.method}`}
+                    className="rounded-2xl border border-white/10 bg-white/[0.02] p-5"
+                  >
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span
+                        className="clip-hex h-3 w-3 shrink-0"
+                        style={{
+                          background:
+                            g.brand === "popbeez"
+                              ? "#ff4d8d"
+                              : g.brand === "nusabeez"
+                                ? "#ff453a"
+                                : "#ffb000",
+                        }}
+                      />
+                      <span className="font-display text-sm font-bold capitalize">
+                        {g.brand === "popbeez" ? "PopBeez" : g.brand === "nusabeez" ? "NusaBeez" : g.brand}
+                      </span>
+                      <span className="rounded-full border border-white/10 px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-stone-400">
+                        {g.method}
+                      </span>
+                    </div>
+                    <p className="mt-3 text-[13px] leading-relaxed text-stone-400">{g.summary}</p>
+
+                    <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-hive">Langkah</p>
+                    <p className="mt-2 text-[13px] leading-relaxed text-stone-300">{g.steps}</p>
+
+                    <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-stone-500">
+                      Yang perlu disiapkan
+                    </p>
+                    <p className="mt-1.5 text-[12px] leading-relaxed text-stone-400">{g.credentials}</p>
+
+                    <div className="mt-4 flex items-start gap-3 rounded-xl border border-white/10 bg-black/20 p-3.5">
+                      <Plug className="mt-0.5 h-4 w-4 shrink-0 text-hive" />
+                      <p className="text-[12px] leading-relaxed text-stone-400">{g.tradeoffs}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="rounded-xl border border-hive/20 bg-hive/[0.05] p-4">
+                <p className="text-[12px] leading-relaxed text-stone-300">
+                  <span className="font-semibold text-hive">Keputusan ada di Anda.</span> Meta Graph API
+                  cocok bila Anda tidak ingin menyentuh backend Pop/Nusa. Backend bersama lebih stabil
+                  bila sudah menyimpan data postingan. Setelah memilih, set kredensial di env Vercel,
+                  lalu panel Showcase mengambil data sendiri — tanpa perubahan kode.
+                </p>
+              </div>
+            </Card>
+
+            <Card
+              title="Env yang dibutuhkan"
+              desc="Semua dibaca server-side. Jangan beri prefix NEXT_PUBLIC_."
+            >
+              <div className="grid gap-2.5 sm:grid-cols-2">
+                {[
+                  ["POPBEEZ_API_URL", "URL lengkap endpoint postingan PopBeez di backend Anda"],
+                  ["POPBEEZ_API_TOKEN", "Bearer token backend (dipakai bersama bila token NusaBeez kosong)"],
+                  ["NUSABEEZ_API_URL", "URL lengkap endpoint postingan NusaBeez di backend Anda"],
+                  ["NUSABEEZ_API_TOKEN", "Opsional — bila token NusaBeez berbeda"],
+                  ["META_PAGE_TOKEN", "Page access token PopBeez/NusaBeez (jalan Meta)"],
+                  ["META_PAGE_ID_POPBEEZ", "ID Page PopBeez"],
+                  ["META_PAGE_ID_NUSABEEZ", "ID Page NusaBeez"],
+                  ["META_IG_USER_ID_POPBEEZ", "Opsional — ID akun Instagram PopBeez (dicari otomatis dari Page bila kosong)"],
+                  ["META_IG_USER_ID_NUSABEEZ", "Opsional — ID akun Instagram NusaBeez"],
+                  ["META_GRAPH_VERSION", "Opsional — default v26.0"],
+                  ["YOUTUBE_API_KEY", "Bila BlinkBeez sudah punya kanal"],
+                  ["YOUTUBE_CHANNEL_ID_BLINKBEEZ", "Channel ID BlinkBeez"],
+                  ["WHATSAPP_NOTIFY_WEBHOOK_URL", "Opsional — notifikasi lead baru ke WA"],
+                ].map(([k, v]) => (
+                  <div key={k} className="rounded-xl border border-white/10 bg-white/[0.02] p-3.5">
+                    <p className="font-mono text-[11px] font-semibold text-hive">{k}</p>
+                    <p className="mt-1 text-[12px] text-stone-500">{v}</p>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            <p className="rounded-2xl border border-white/10 bg-coal p-5 text-[12px] leading-relaxed text-stone-500">
+              Selama konektor belum aktif, panel Showcase tetap tampil profesional: status
+              “belum terhubung” + tombol ikuti/subscribe. Tidak ada angka contoh yang ditampilkan.
+            </p>
           </div>
         )}
 

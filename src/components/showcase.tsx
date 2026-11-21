@@ -1,6 +1,6 @@
 "use client";
 
-import type { ComponentType } from "react";
+import { useState, type ComponentType, type CSSProperties } from "react";
 import {
   ArrowUpRight,
   ExternalLink,
@@ -13,8 +13,8 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import type { SiteSettings } from "@/lib/settings";
-import type { FeedItem, ShowcaseData } from "@/lib/showcase-types";
-import { YoutubeIcon } from "./social-icons";
+import type { BrandFeed, FeedItem, ShowcaseData } from "@/lib/showcase-types";
+import { InstagramIcon, YoutubeIcon } from "./social-icons";
 import { Reveal, SectionTag } from "./reveal";
 
 type PanelIcon = ComponentType<{ className?: string }>;
@@ -133,13 +133,153 @@ function PostRow({ item, color }: { item: FeedItem; color: string }) {
   );
 }
 
+function PanelCard({
+  p,
+  delay,
+  feed,
+  igFeed,
+  url,
+  ig,
+  logo,
+}: {
+  p: (typeof PANELS)[number];
+  delay: number;
+  feed?: BrandFeed;
+  igFeed?: BrandFeed;
+  url: string;
+  ig: string;
+  logo: string;
+}) {
+  const hasIg = !!igFeed?.connected && igFeed.items.length > 0;
+  const fbOk = !!feed?.connected && feed.items.length > 0;
+  // Bila Facebook belum terhubung tetapi Instagram sudah, tampilkan Instagram lebih dulu.
+  const [tab, setTab] = useState<"fb" | "ig">(hasIg && !fbOk ? "ig" : "fb");
+  const active = hasIg && tab === "ig" ? igFeed : feed;
+  const channel = ig ? p.channel.replace("Facebook Page", "Facebook & Instagram") : p.channel;
+
+  return (
+    <Reveal delay={delay}>
+      <div className="flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#0c0c0e]">
+        <div className="flex items-start justify-between gap-3 border-b border-white/10 p-6">
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.25em]" style={{ color: p.color }}>
+              {channel}
+            </p>
+            <h3 className="mt-1.5 font-display text-2xl font-bold">{p.name}</h3>
+          </div>
+          {logo ? (
+            <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-xl border border-white/10 bg-white/[0.03]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={logo} alt={`Logo ${p.name}`} className="h-full w-full object-cover" />
+            </span>
+          ) : (
+            <span
+              className="clip-hex grid h-11 w-11 shrink-0 place-items-center"
+              style={{ background: `color-mix(in srgb, ${p.color} 15%, transparent)`, color: p.color }}
+            >
+              <p.icon className="h-4.5 w-4.5" />
+            </span>
+          )}
+        </div>
+
+        <div className="flex-1 space-y-2.5 p-5">
+          {hasIg && (
+            <div
+              role="tablist"
+              aria-label={`Sumber postingan ${p.name}`}
+              className="mb-1 flex gap-1 rounded-full border border-white/10 p-1"
+            >
+              {(
+                [
+                  ["fb", "Facebook"],
+                  ["ig", "Instagram"],
+                ] as const
+              ).map(([k, label]) => (
+                <button
+                  key={k}
+                  type="button"
+                  role="tab"
+                  aria-selected={tab === k}
+                  onClick={() => setTab(k)}
+                  className={`flex-1 rounded-full px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] transition-colors ${
+                    tab === k ? "font-semibold text-ink" : "text-stone-400 hover:text-stone-200"
+                  }`}
+                  style={tab === k ? { background: p.color } : undefined}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {active?.connected && active.items.length > 0 ? (
+            active.items.map((item) => <PostRow key={item.id} item={item} color={p.color} />)
+          ) : (
+            <div className="flex min-h-[220px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 px-6 text-center">
+              <span
+                className="grid h-12 w-12 place-items-center rounded-full"
+                style={{ background: `color-mix(in srgb, ${p.color} 12%, transparent)`, color: p.color }}
+              >
+                <p.icon className="h-5 w-5" />
+              </span>
+              <p className="mt-4 font-display text-sm font-bold text-stone-200">
+                {p.key === "blinkbeez" ? "Segera hadir" : "Belum terhubung"}
+              </p>
+              <p className="mt-1.5 max-w-[230px] text-[12px] leading-relaxed text-stone-500">
+                {active?.reason ||
+                  "Sumber data belum dikonfigurasi. Kunjungi kanal resminya lewat tombol di bawah."}
+              </p>
+            </div>
+          )}
+        </div>
+
+        <div className="flex items-center gap-2 border-t border-white/10 p-5">
+          {url ? (
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex flex-1 items-center justify-center gap-2 rounded-full py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-ink transition-transform duration-300 hover:scale-[1.02]"
+              style={{ background: p.color }}
+            >
+              {p.cta}
+              <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </a>
+          ) : !ig ? (
+            <span className="flex w-full items-center justify-center gap-2 rounded-full border border-white/10 py-3 font-mono text-[10px] uppercase tracking-[0.2em] text-stone-600">
+              Tautan belum diisi di /admin
+            </span>
+          ) : null}
+          {ig && (
+            <a
+              href={ig}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${p.name} di Instagram`}
+              className={`group inline-flex items-center justify-center gap-2 rounded-full border py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] transition-colors hover:bg-[var(--c)] hover:text-ink ${
+                url ? "shrink-0 px-5" : "flex-1"
+              }`}
+              style={{ "--c": p.color, color: p.color, borderColor: `color-mix(in srgb, ${p.color} 45%, transparent)` } as CSSProperties}
+            >
+              <InstagramIcon className="h-3.5 w-3.5" />
+              Instagram
+            </a>
+          )}
+        </div>
+      </div>
+    </Reveal>
+  );
+}
+
 export default function Showcase({
   urls,
   logos,
+  instagram,
   data,
 }: {
   urls: SiteSettings["urls"];
   logos: SiteSettings["logos"];
+  instagram: SiteSettings["instagram"];
   data: ShowcaseData;
 }) {
   const realProducts = [
@@ -186,93 +326,18 @@ export default function Showcase({
 
         {/* Three brand panels */}
         <div className="mt-16 grid gap-4 lg:grid-cols-3">
-          {PANELS.map((p, i) => {
-            const feed = data?.[p.key];
-            const url = urls[p.key];
-            return (
-              <Reveal key={p.key} delay={i * 0.08}>
-                <div className="flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#0c0c0e]">
-                  <div className="flex items-start justify-between gap-3 border-b border-white/10 p-6">
-                    <div>
-                      <p
-                        className="font-mono text-[10px] uppercase tracking-[0.25em]"
-                        style={{ color: p.color }}
-                      >
-                        {p.channel}
-                      </p>
-                      <h3 className="mt-1.5 font-display text-2xl font-bold">{p.name}</h3>
-                    </div>
-                    {logos[p.key] ? (
-                      <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-xl border border-white/10 bg-white/[0.03]">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={logos[p.key]}
-                          alt={`Logo ${p.name}`}
-                          className="h-full w-full object-cover"
-                        />
-                      </span>
-                    ) : (
-                      <span
-                        className="clip-hex grid h-11 w-11 shrink-0 place-items-center"
-                        style={{
-                          background: `color-mix(in srgb, ${p.color} 15%, transparent)`,
-                          color: p.color,
-                        }}
-                      >
-                        <p.icon className="h-4.5 w-4.5" />
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex-1 space-y-2.5 p-5">
-                    {feed?.connected && feed.items.length > 0 ? (
-                      feed.items.map((item) => (
-                        <PostRow key={item.id} item={item} color={p.color} />
-                      ))
-                    ) : (
-                      <div className="flex min-h-[220px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 px-6 text-center">
-                        <span
-                          className="grid h-12 w-12 place-items-center rounded-full"
-                          style={{
-                            background: `color-mix(in srgb, ${p.color} 12%, transparent)`,
-                            color: p.color,
-                          }}
-                        >
-                          <p.icon className="h-5 w-5" />
-                        </span>
-                        <p className="mt-4 font-display text-sm font-bold text-stone-200">
-                          {p.key === "blinkbeez" ? "Segera hadir" : "Belum terhubung"}
-                        </p>
-                        <p className="mt-1.5 max-w-[230px] text-[12px] leading-relaxed text-stone-500">
-                          {feed?.reason ??
-                            "Sumber data belum dikonfigurasi. Kunjungi kanal resminya lewat tombol di bawah."}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="border-t border-white/10 p-5">
-                    {url ? (
-                      <a
-                        href={url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex w-full items-center justify-center gap-2 rounded-full py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-ink transition-transform duration-300 hover:scale-[1.02]"
-                        style={{ background: p.color }}
-                      >
-                        {p.cta}
-                        <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                      </a>
-                    ) : (
-                      <span className="flex w-full items-center justify-center gap-2 rounded-full border border-white/10 py-3 font-mono text-[10px] uppercase tracking-[0.2em] text-stone-600">
-                        Tautan belum diisi di /admin
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </Reveal>
-            );
-          })}
+          {PANELS.map((p, i) => (
+            <PanelCard
+              key={p.key}
+              p={p}
+              delay={i * 0.08}
+              feed={data?.[p.key]}
+              igFeed={p.key === "blinkbeez" ? undefined : data?.instagram?.[p.key]}
+              url={urls[p.key]}
+              ig={p.key === "blinkbeez" ? "" : instagram[p.key]}
+              logo={logos[p.key]}
+            />
+          ))}
         </div>
 
         {/* Products that already exist — CTA only, no dashboard */}

@@ -34,7 +34,7 @@ export default function Footer({ urls, hiveLogo = "" }: { urls: SiteSettings["ur
           <a href="#atas" className="group inline-flex w-fit items-center gap-3 rounded-full border border-white/15 px-5 py-3 font-mono text-[10px] uppercase tracking-[0.25em] text-stone-300 transition-colors hover:border-hive hover:text-hive">Kembali ke Atas<ArrowUp className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5" /></a>
         </div>
         <div className="mt-14 flex flex-col items-start justify-between gap-3 border-t border-white/10 py-6 font-mono text-[10px] uppercase tracking-[0.2em] text-stone-600 sm:flex-row sm:items-center">
-          <div className="flex flex-wrap items-center gap-5"><p>© 2026 HiveComp — Media &amp; Commerce Group</p><Link href="/media-kit" className="transition-colors hover:text-hive">Media Kit</Link><Link href="/#kontak" className="transition-colors hover:text-hive">Kontak</Link><Link href="/kebijakan" className="transition-colors hover:text-hive">Privasi &amp; Disclaimer</Link><Link href="/admin" className="transition-colors hover:text-hive">Dashboard Admin</Link></div>
+          <div className="flex flex-wrap items-center gap-5"><p>© 2026 HiveComp — Media &amp; Commerce Group</p><Link href="/media-kit" className="transition-colors hover:text-hive">Media Kit</Link><Link href="/#kontak" className="transition-colors hover:text-hive">Kontak</Link><Link href="/kebijakan" className="transition-colors hover:text-hive">Privasi &amp; Disclaimer</Link><Link href="/unduhan" className="transition-colors hover:text-hive">Unduhan</Link><Link href="/admin" className="transition-colors hover:text-hive">Dashboard Admin</Link></div>
           <p>www.hivecomp.my.id</p>
         </div>
       </div>

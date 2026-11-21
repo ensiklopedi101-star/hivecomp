@@ -27,6 +27,20 @@ export const settings = pgTable("settings", {
     .notNull(),
 });
 
+/** Operator guidance for connecting the landing page showcase to official sources. */
+export const connectorGuidance = pgTable("connector_guidance", {
+  id: serial("id").primaryKey(),
+  brand: varchar("brand", { length: 40 }).notNull(),
+  method: varchar("method", { length: 120 }).notNull(),
+  summary: text("summary").notNull(),
+  steps: text("steps").notNull(),
+  credentials: text("credentials").notNull(),
+  tradeoffs: text("tradeoffs").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
 /** Prototype articles for the in-app Portal-Hub demo (not the live portal-hub.online backend). */
 export const articles = pgTable("articles", {
   id: serial("id").primaryKey(),
