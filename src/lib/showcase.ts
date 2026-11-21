@@ -46,6 +46,19 @@ type YtVideo = {
   statistics?: { viewCount?: string; likeCount?: string; commentCount?: string };
 };
 
+/**
+ * Rapikan teks postingan: literal "\n" dari API, baris baru, dan spasi ganda
+ * diratakan jadi satu spasi supaya kartu ringkas tidak menampilkan "\n".
+ */
+const cleanText = (v: unknown, fallback: string): string => {
+  if (typeof v !== "string") return fallback;
+  const normalized = v
+    .replace(/\\+[rn]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  return normalized ? normalized.slice(0, 500) : fallback;
+};
+
 const num = (v: unknown): number | null =>
   typeof v === "number" && Number.isFinite(v) ? v : null;
 
@@ -78,7 +91,7 @@ async function metaFeed(pageId: string, token: string): Promise<BrandFeed> {
 
   const items: FeedItem[] = posts.map((p) => ({
     id: p.id ?? "",
-    text: p.message ?? "(postingan tanpa teks)",
+    text: cleanText(p.message, "(postingan tanpa teks)"),
     url: p.permalink_url ?? "",
     image: p.full_picture ?? "",
     publishedAt: p.created_time ?? "",
@@ -147,7 +160,7 @@ export function parseBackendItems(payload: unknown): FeedItem[] {
     const rawId = r.id;
     const id = typeof rawId === "string" || typeof rawId === "number" ? String(rawId) : "";
     const rawText = pick(r, ["text", "message", "caption", "title"]);
-    const text = typeof rawText === "string" ? rawText.trim().slice(0, 500) : "";
+    const text = typeof rawText === "string" ? cleanText(rawText, "") : "";
     const url = httpsUrl(pick(r, ["url", "permalink_url", "permalink", "link"]));
     if (!id || !text || !url) continue;
     const rawDate = pick(r, ["publishedAt", "published_at", "created_time", "created_at"]);
@@ -273,7 +286,7 @@ async function youtubeFeed(channelId: string, key: string): Promise<BrandFeed> {
     const s = stats.find((v) => v.id === id)?.statistics;
     return {
       id,
-      text: i.snippet?.title ?? "(video tanpa judul)",
+      text: cleanText(i.snippet?.title, "(video tanpa judul)"),
       url: `https://www.youtube.com/watch?v=${id}`,
       image: i.snippet?.thumbnails?.medium?.url ?? i.snippet?.thumbnails?.high?.url ?? "",
       publishedAt: i.snippet?.publishedAt ?? "",
@@ -327,7 +340,7 @@ export function parseInstagramMedia(payload: unknown): FeedItem[] {
     const ts = typeof m.timestamp === "string" && !Number.isNaN(Date.parse(m.timestamp)) ? m.timestamp : "";
     items.push({
       id,
-      text: caption || "(postingan tanpa teks)",
+      text: cleanText(caption, "(postingan tanpa teks)"),
       url,
       image,
       publishedAt: ts,
