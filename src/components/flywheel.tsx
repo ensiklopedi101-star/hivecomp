@@ -6,6 +6,7 @@ import { Reveal, SectionTag } from "./reveal";
 import { YoutubeIcon } from "./social-icons";
 
 type Node = {
+  slug: "popbeez" | "nusabeez" | "portal-hub" | "blinkbeez" | "e-beez";
   name: string;
   title: string;
   desc: string;
@@ -14,48 +15,95 @@ type Node = {
 };
 
 /**
- * Peta jaringan brand — BUKAN diagram alur data.
- * (Portal-Hub adalah agregator mandiri, bukan sumber news card Pop/Nusa.)
+ * Lima kanal dalam satu naungan.
+ * Setiap produk berjalan dengan sistemnya sendiri — yang disatukan HiveComp
+ * adalah identitas, standar kerja, dan pintu masuk audiens.
  */
 const NODES: Node[] = [
   {
+    slug: "popbeez",
     name: "PopBeez",
     title: "News card hiburan",
-    desc: "Kanal Facebook untuk drakor, dracin, idol, manga, dan donghua, dengan sistem penerbitan yang sama seperti NusaBeez.",
+    desc: "Kabar seputar drakor, dracin, idol, manga, dan donghua dalam satu kartu ringkas — cepat dibaca, mudah dibagikan ke grup percakapan.",
     color: "#ff4d8d",
     icon: Heart,
   },
   {
+    slug: "nusabeez",
     name: "NusaBeez",
     title: "News card nasional",
-    desc: "Kanal Facebook untuk kabar nasional, dengan jalur produksi tersendiri di atas sistem yang sama dengan PopBeez.",
+    desc: "Peristiwa dan kebijakan nasional pilihan, dirangkum jadi satu kartu yang bisa dipindai dalam beberapa detik.",
     color: "#ff453a",
     icon: Flag,
   },
   {
+    slug: "portal-hub",
     name: "Portal-Hub",
     title: "Agregator berita mandiri",
-    desc: "Portal berita dengan tata letak ala Yahoo dan MSN, aktif di www.portal-hub.online.",
+    desc: "Menyatukan berita dari berbagai media dalam satu halaman: nasional, ekonomi, teknologi, olahraga, dan hiburan — diperbarui setiap hari di portal-hub.online.",
     color: "#38bdf8",
     icon: Globe,
   },
   {
+    slug: "blinkbeez",
     name: "BlinkBeez",
     title: "Kanal YouTube Shorts",
-    desc: "Video pendek 60 detik berisi potongan berita dan hiburan, sedang disiapkan untuk tayang.",
+    desc: "Video pendek 60 detik berisi potongan berita dan hiburan untuk ditonton di sela waktu. Sedang disiapkan untuk tayang.",
     color: "#a78bfa",
     icon: YoutubeIcon,
   },
   {
+    slug: "e-beez",
     name: "E-Beez",
     title: "Marketplace",
-    desc: "Marketplace dengan sistemnya sendiri, diakses lewat subdomain E-Beez.",
+    desc: "Etalase produk UMKM — makanan, kerajinan, dan kebutuhan harian — lengkap dengan katalog, pembayaran, dan pengiriman dalam satu alur.",
     color: "#34d399",
     icon: ShoppingBag,
   },
 ];
 
-function OrbitDiagram() {
+type BrandLogos = Record<string, string>;
+
+/** Logo brand (diunggah lewat /admin); ikon Lucide hanya dipakai bila kosong. */
+function NodeMark({
+  n,
+  logo,
+  size,
+}: {
+  n: Node;
+  logo: string;
+  size: "lg" | "sm";
+}) {
+  const box = size === "lg" ? "h-14 w-14 sm:h-16 sm:w-16" : "h-11 w-11";
+  if (logo) {
+    return (
+      <span
+        className={`grid ${box} shrink-0 place-items-center overflow-hidden rounded-full border bg-ink transition-transform duration-300 group-hover:scale-110`}
+        style={{
+          borderColor: `color-mix(in srgb, ${n.color} 55%, transparent)`,
+          boxShadow: `0 0 28px color-mix(in srgb, ${n.color} 25%, transparent)`,
+        }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={logo} alt={`Logo ${n.name}`} className="h-full w-full object-cover" />
+      </span>
+    );
+  }
+  return (
+    <span
+      className={`grid ${box} shrink-0 place-items-center rounded-full border bg-ink transition-transform duration-300 group-hover:scale-110`}
+      style={{
+        borderColor: `color-mix(in srgb, ${n.color} 55%, transparent)`,
+        boxShadow: `0 0 28px color-mix(in srgb, ${n.color} 25%, transparent)`,
+        color: n.color,
+      }}
+    >
+      <n.icon className="h-5 w-5" />
+    </span>
+  );
+}
+
+function OrbitDiagram({ logos }: { logos: BrandLogos }) {
   return (
     <div className="relative mx-auto aspect-square w-full max-w-[520px]">
       {/* Rotating dashed rings */}
@@ -116,15 +164,8 @@ function OrbitDiagram() {
               animationDuration: "5.5s",
             }}
           >
-            <div
-              className="relative grid h-14 w-14 place-items-center rounded-full border bg-ink transition-transform duration-300 hover:scale-110 sm:h-16 sm:w-16"
-              style={{
-                borderColor: `color-mix(in srgb, ${n.color} 55%, transparent)`,
-                boxShadow: `0 0 28px color-mix(in srgb, ${n.color} 25%, transparent)`,
-                color: n.color,
-              }}
-            >
-              <n.icon className="h-5 w-5" />
+            <div className="relative">
+              <NodeMark n={n} logo={logos[n.slug] ?? ""} size="lg" />
               <span
                 className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full font-mono text-[9px] font-medium text-ink"
                 style={{ background: n.color }}
@@ -142,7 +183,7 @@ function OrbitDiagram() {
   );
 }
 
-export default function Flywheel() {
+export default function Flywheel({ logos }: { logos: BrandLogos }) {
   return (
     <section id="jaringan" className="relative border-y border-white/10 bg-coal/40">
       <div className="mx-auto max-w-7xl px-5 py-28 sm:px-8 sm:py-36">
@@ -167,7 +208,7 @@ export default function Flywheel() {
 
         <div className="mt-16 grid items-start gap-14 lg:grid-cols-[1.05fr_1fr] lg:gap-20">
           <Reveal className="lg:sticky lg:top-28">
-            <OrbitDiagram />
+            <OrbitDiagram logos={logos} />
           </Reveal>
 
           <div>
@@ -175,15 +216,7 @@ export default function Flywheel() {
               <Reveal key={n.name} delay={i * 0.06}>
                 <div className="group flex gap-5 border-b border-white/10 py-7 first:pt-0">
                   <span className="font-mono text-xs text-stone-600">0{i + 1}</span>
-                  <span
-                    className="clip-hex grid h-11 w-11 shrink-0 place-items-center transition-transform duration-500 group-hover:rotate-[30deg]"
-                    style={{
-                      background: `color-mix(in srgb, ${n.color} 14%, transparent)`,
-                      color: n.color,
-                    }}
-                  >
-                    <n.icon className="h-4.5 w-4.5" />
-                  </span>
+                  <NodeMark n={n} logo={logos[n.slug] ?? ""} size="sm" />
                   <div>
                     <p
                       className="font-mono text-[10px] uppercase tracking-[0.25em]"
@@ -205,11 +238,17 @@ export default function Flywheel() {
             <Reveal delay={0.2}>
               <div className="mt-8 flex items-start gap-4 rounded-2xl border border-hive/25 bg-hive/[0.06] p-5">
                 <RefreshCw className="mt-0.5 h-5 w-5 shrink-0 animate-rotate-slow text-hive" />
-                <p className="text-sm leading-relaxed text-stone-300">
-                  <span className="font-semibold text-hive">Satu halaman, semua pintu masuk — </span>
-                  pengunjung cukup datang ke hivecomp.my.id untuk menemukan
-                  seluruh kanal, lalu diarahkan ke produk yang dicari.
-                </p>
+                <div>
+                  <p className="font-display text-sm font-semibold uppercase tracking-[0.12em] text-hive">
+                    Satu pintu masuk
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-stone-300">
+                    hivecomp.my.id mempertemukan kelima kanal dalam satu
+                    halaman. Pengunjung bisa mengenal tiap brand lebih dulu,
+                    lalu melanjutkan ke kanal atau produk yang dibutuhkan —
+                    tanpa mencari alamat satu per satu.
+                  </p>
+                </div>
               </div>
             </Reveal>
           </div>
