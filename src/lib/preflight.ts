@@ -81,21 +81,28 @@ export function buildPreflight(
       : "Belum diset — Anda tetap bisa membalas/meneruskan pesan via tombol WhatsApp di tab Pesan Masuk.",
   });
 
-  const backendReady = Boolean(process.env.POPNUSA_BACKEND_URL?.trim());
+  for (const k of ["popbeez", "nusabeez"] as const) {
+    const has = s.instagram[k].trim().length > 0;
+    checks.push({
+      label: `Instagram ${BRANDS[k].name}`,
+      ok: has,
+      optional: true,
+      note: has ? s.instagram[k] : "Belum diisi — tombol Instagram disembunyikan otomatis.",
+    });
+  }
+
   const metaReady = !!(
     process.env.META_PAGE_TOKEN &&
     process.env.META_PAGE_ID_POPBEEZ &&
     process.env.META_PAGE_ID_NUSABEEZ
   );
   checks.push({
-    label: "Konektor Showcase Pop/Nusa (Backend PopNusa atau Meta)",
-    ok: backendReady || metaReady,
+    label: "Konektor Meta (Showcase Pop/Nusa — cache 5 menit)",
+    ok: metaReady,
     optional: true,
-    note: backendReady
-      ? "POPNUSA_BACKEND_URL aktif — data ditarik langsung dari backend sistem Pop/Nusa."
-      : metaReady
-        ? "Kredensial Meta Graph API terdeteksi."
-        : "Belum diset — panel Pop/Nusa tampil jujur sebagai 'belum terhubung' dengan tombol Ikuti.",
+    note: metaReady
+      ? "Kredensial terdeteksi."
+      : "Belum diset — panel tampil jujur sebagai 'belum terhubung'.",
   });
 
   const ytReady = !!(

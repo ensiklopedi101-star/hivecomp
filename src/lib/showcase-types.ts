@@ -21,4 +21,6 @@ export type ShowcaseData = {
   popbeez: BrandFeed;
   nusabeez: BrandFeed;
   blinkbeez: BrandFeed;
+  /** Postingan Instagram — hanya ada bila sumbernya dikonfigurasi. */
+  instagram?: Partial<Record<"popbeez" | "nusabeez", BrandFeed>>;
 };

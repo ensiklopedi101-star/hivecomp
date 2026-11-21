@@ -16,6 +16,7 @@ export default function robots(): MetadataRoute.Robots {
           "/portal-hub",
           "/blueprint",
           "/studio-logo",
+          "/unduhan",
         ],
       },
     ],

@@ -1,0 +1,29 @@
+HiveComp — Foto Profil Facebook PopBeez & NusaBeez
+
+ISI
+- *-profil-pilihan.png : lembar perbandingan (3 varian + tampilan di halaman & feed)
+- {brand}-profil-{varian}.png : file untuk diupload, persegi 1080x1080 px
+- {brand}-profil-{varian}.svg : vektor (tanpa teks, mudah diedit di Figma/Illustrator)
+
+VARIAN
+PopBeez   A Pop White (rekomendasi) | B Pop Solid | C Card Stack
+NusaBeez  A Headline Glow | B Solid Red (rekomendasi) | C Front Page
+
+KENAPA DIREKOMENDASIKAN
+PopBeez A (Pop White): latar putih, logo tetap pink — kontras tinggi,
+bersih, dan tetap terbaca di ukuran kecil (komentar ~36 px).
+NusaBeez B (Solid Red): warna penuh dengan logo putih, tegas di ukuran kecil
+dan menonjol di atas sampul gelap.
+Logo dipusatkan secara optik (berdasarkan titik berat bentuk huruf), bukan
+sekadar kotak pembatas, supaya terlihat benar-benar di tengah.
+
+CARA UPLOAD
+Halaman Facebook -> arahkan ke foto profil -> Perbarui foto profil ->
+Unggah foto -> pilih file PNG -> Simpan.
+Upload file PERSEGI apa adanya; Facebook yang memotongnya jadi lingkaran.
+
+AREA AMAN
+Logo berada di tengah dan sudut dibiarkan kosong, jadi tidak terpotong
+saat dipotong melingkar (170 px desktop, 128 px HP, ~36 px komentar).
+
+Tipografi pada lembar perbandingan: Space Grotesk (SIL Open Font License).

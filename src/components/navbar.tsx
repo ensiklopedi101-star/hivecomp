@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import HiveIdentity from "./hive-identity";
 
-export default function Navbar({ portalHubUrl = "", hiveLogo = "" }: { portalHubUrl?: string; hiveLogo?: string }) {
+export default function Navbar({ hiveLogo = "" }: { hiveLogo?: string }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 

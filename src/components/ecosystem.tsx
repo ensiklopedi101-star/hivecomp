@@ -16,6 +16,7 @@ import {
   Zap,
   type LucideIcon,
 } from "lucide-react";
+import { InstagramIcon } from "./social-icons";
 import { Reveal, SectionTag } from "./reveal";
 
 type Brand = {
@@ -257,9 +258,11 @@ function BrandPreview({
 export default function Ecosystem({
   urls,
   logos,
+  instagram,
 }: {
   urls: SiteSettings["urls"];
   logos: SiteSettings["logos"];
+  instagram: SiteSettings["instagram"];
 }) {
   const onMove = (e: MouseEvent<HTMLDivElement>) => {
     const el = e.currentTarget;
@@ -297,6 +300,7 @@ export default function Ecosystem({
         {BRANDS.map((b, i) => {
           const url = urls[b.id as keyof typeof urls];
           const logoUrl = logos[b.id as keyof typeof logos];
+          const igLink = (instagram as Record<string, string>)[b.id] ?? "";
           return (
             <div key={b.id} className={b.className}>
               <motion.div
@@ -376,22 +380,37 @@ export default function Ecosystem({
                       </span>
                     ))}
                   </div>
-                  {url ? (
-                    <a
-                      href={url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group/cta mt-6 inline-flex items-center gap-2.5 rounded-full px-6 py-3.5 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-ink shadow-lg transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_8px_30px_-6px_var(--brand)]"
-                      style={{ background: "var(--brand)" }}
-                    >
-                      {b.cta}
-                      <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:-translate-y-0.5 group-hover/cta:translate-x-0.5" />
-                    </a>
-                  ) : (
-                    <span className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/10 px-6 py-3.5 font-mono text-[11px] uppercase tracking-[0.18em] text-stone-600">
-                      {b.cta} — URL diatur di /admin
-                    </span>
-                  )}
+                  <div className="mt-6 flex flex-wrap items-center gap-3">
+                      {url ? (
+                        <a
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group/cta inline-flex items-center gap-2.5 rounded-full px-6 py-3.5 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-ink shadow-lg transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_8px_30px_-6px_var(--brand)]"
+                          style={{ background: "var(--brand)" }}
+                        >
+                          {b.cta}
+                          <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:-translate-y-0.5 group-hover/cta:translate-x-0.5" />
+                        </a>
+                      ) : (
+                        <span className="inline-flex items-center gap-2 rounded-full border border-white/10 px-6 py-3.5 font-mono text-[11px] uppercase tracking-[0.18em] text-stone-600">
+                          {b.cta} — URL diatur di /admin
+                        </span>
+                      )}
+                    {igLink && (
+                      <a
+                        href={igLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${b.name} di Instagram`}
+                        title={`${b.name} di Instagram`}
+                        className="grid h-12 w-12 place-items-center rounded-full border text-[var(--brand)] transition-all duration-300 hover:scale-110 hover:bg-[var(--brand)] hover:text-ink"
+                        style={{ borderColor: "color-mix(in srgb, var(--brand) 45%, transparent)" }}
+                      >
+                        <InstagramIcon className="h-5 w-5" />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </motion.div>
             </div>
