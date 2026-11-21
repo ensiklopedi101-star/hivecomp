@@ -75,6 +75,18 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   ],
 };
 
+/**
+ * URL kanal/sosial: bila alamat diketik tanpa skema (mis. "ebeez.hivecomp.my.id"),
+ * tambahkan https:// supaya tidak diperlakukan sebagai path relatif.
+ */
+const url = (v: unknown, fallback: string) => {
+  if (typeof v !== "string" || !v.trim()) return fallback;
+  const raw = v.trim();
+  if (/^https?:\/\//i.test(raw)) return raw.slice(0, 300);
+  if (/^[a-z0-9-]+(\.[a-z0-9-]+)+(\/\S*)?$/i.test(raw)) return `https://${raw}`.slice(0, 300);
+  return fallback;
+};
+
 const str = (v: unknown, fallback: string, max = 400) =>
   typeof v === "string" && v.trim() ? v.trim().slice(0, max) : fallback;
 
@@ -127,11 +139,11 @@ export async function getSettings(): Promise<SiteSettings> {
       description: str(raw.hero?.description, d.hero.description, 600),
     },
     urls: {
-      popbeez: str(raw.urls?.popbeez, d.urls.popbeez, 300),
-      nusabeez: str(raw.urls?.nusabeez, d.urls.nusabeez, 300),
-      "portal-hub": str(raw.urls?.["portal-hub"], d.urls["portal-hub"], 300),
-      blinkbeez: str(raw.urls?.blinkbeez, d.urls.blinkbeez, 300),
-      "e-beez": str(raw.urls?.["e-beez"], d.urls["e-beez"], 300),
+      popbeez: url(raw.urls?.popbeez, d.urls.popbeez),
+      nusabeez: url(raw.urls?.nusabeez, d.urls.nusabeez),
+      "portal-hub": url(raw.urls?.["portal-hub"], d.urls["portal-hub"]),
+      blinkbeez: url(raw.urls?.blinkbeez, d.urls.blinkbeez),
+      "e-beez": url(raw.urls?.["e-beez"], d.urls["e-beez"]),
     },
     logos: {
       popbeez: logo(raw.logos?.popbeez, d.logos.popbeez),
@@ -146,9 +158,9 @@ export async function getSettings(): Promise<SiteSettings> {
       location: str(raw.contact?.location, d.contact.location, 160),
     },
     socials: {
-      facebook: str(raw.socials?.facebook, d.socials.facebook, 300),
-      instagram: str(raw.socials?.instagram, d.socials.instagram, 300),
-      youtube: str(raw.socials?.youtube, d.socials.youtube, 300),
+      facebook: url(raw.socials?.facebook, d.socials.facebook),
+      instagram: url(raw.socials?.instagram, d.socials.instagram),
+      youtube: url(raw.socials?.youtube, d.socials.youtube),
     },
     instagram: {
       popbeez: igUrl(raw.instagram?.popbeez),
